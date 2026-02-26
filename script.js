@@ -1,18 +1,34 @@
-// DOM Elements
+// ===============================
+// DOM ELEMENT REFERENCES
+// ===============================
+// Here we grab HTML elements so JavaScript can control them.
+// Think of this as "connecting JS to the UI".
+
 const startScreen = document.getElementById("start-screen");
 const quizScreen = document.getElementById("quiz-screen");
 const resultScreen = document.getElementById("result-screen");
+
 const startButton = document.getElementById("start-btn");
 const questionText = document.getElementById("question-text");
 const answersContainer = document.getElementById("answers-container");
+
 const currentQuestionSpan = document.getElementById("current-question");
 const totalQuestionsSpan = document.getElementById("total-questions");
+
 const scoreSpan = document.getElementById("score");
 const finalScoreSpan = document.getElementById("final-score");
 const maxScoreSpan = document.getElementById("max-score");
+
 const resultMessage = document.getElementById("result-message");
 const restartButton = document.getElementById("restart-btn");
+
 const progressBar = document.getElementById("progress");
+
+// ===============================
+// QUIZ DATA (THE SOURCE OF TRUTH)
+// ===============================
+// This array contains all questions and answers.
+// The UI is built dynamically using this data.
 
 const quizQuestions = [
   {
@@ -61,94 +77,132 @@ const quizQuestions = [
     ],
   },
 ];
+// (Other questions )
 
-// QUIZ STATE VARS
-let currentQuestionIndex = 0;
-let score = 0;
-let answersDisabled = false;
+// ===============================
+// APPLICATION STATE VARIABLES
+// ===============================
+// These variables store the current state of the quiz.
 
+let currentQuestionIndex = 0; // Tracks which question is being shown
+let score = 0; // Tracks correct answers
+let answersDisabled = false; // Prevents multiple clicks
+
+// Set total questions in UI
 totalQuestionsSpan.textContent = quizQuestions.length;
 maxScoreSpan.textContent = quizQuestions.length;
 
-// event listeners
+// ===============================
+// EVENT LISTENERS
+// ===============================
+// Listen for user interactions
+
 startButton.addEventListener("click", startQuiz);
 restartButton.addEventListener("click", restartQuiz);
 
-function startQuiz() {
-  // reset vars
-  currentQuestionIndex = 0;
-  score = 0;
-  scoreSpan.textContent = 0;
+// ===============================
+// START QUIZ FUNCTION
+// ===============================
+// Resets state and shows the first question
 
+function startQuiz() {
+  currentQuestionIndex = 0; // Reset question index
+  score = 0; // Reset score
+  scoreSpan.textContent = 0; // Reset score display
+
+  // Hide start screen and show quiz screen
   startScreen.classList.remove("active");
   quizScreen.classList.add("active");
 
-  showQuestion();
+  showQuestion(); // Render first question
 }
 
+// ===============================
+// DISPLAY CURRENT QUESTION
+// ===============================
+// Reads data and updates the UI
+
 function showQuestion() {
-  // reset state
-  answersDisabled = false;
+  answersDisabled = false; // Enable answer clicking
 
   const currentQuestion = quizQuestions[currentQuestionIndex];
 
+  // Update question counter
   currentQuestionSpan.textContent = currentQuestionIndex + 1;
 
+  // Update progress bar
   const progressPercent = (currentQuestionIndex / quizQuestions.length) * 100;
   progressBar.style.width = progressPercent + "%";
 
+  // Display question text
   questionText.textContent = currentQuestion.question;
 
+  // Clear old answer buttons
   answersContainer.innerHTML = "";
 
+  // Dynamically create answer buttons
   currentQuestion.answers.forEach((answer) => {
     const button = document.createElement("button");
+
     button.textContent = answer.text;
     button.classList.add("answer-btn");
 
-    // what is dataset? it's a property of the button element that allows you to store custom data
+    // Store whether this answer is correct
+    // dataset allows us to attach custom data to DOM elements
     button.dataset.correct = answer.correct;
 
+    // Add click event to each button
     button.addEventListener("click", selectAnswer);
 
+    // Add button to the container
     answersContainer.appendChild(button);
   });
 }
 
-function selectAnswer(event) {
-  // optimization check
-  if (answersDisabled) return;
+// ===============================
+// HANDLE ANSWER SELECTION
+// ===============================
 
-  answersDisabled = true;
+function selectAnswer(event) {
+  if (answersDisabled) return; // Prevent multiple clicks
+
+  answersDisabled = true; // Lock answers
 
   const selectedButton = event.target;
+
+  // dataset stores values as strings
   const isCorrect = selectedButton.dataset.correct === "true";
 
-  // Here Array.from() is used to convert the NodeList returned by answersContainer.children into an array, this is because the NodeList is not an array and we need to use the forEach method
+  // Convert children NodeList to array so we can loop
   Array.from(answersContainer.children).forEach((button) => {
     if (button.dataset.correct === "true") {
-      button.classList.add("correct");
+      button.classList.add("correct"); // Highlight correct answer
     } else if (button === selectedButton) {
-      button.classList.add("incorrect");
+      button.classList.add("incorrect"); // Highlight wrong selection
     }
   });
 
+  // Update score if correct
   if (isCorrect) {
     score++;
     scoreSpan.textContent = score;
   }
 
+  // Wait 1 second before moving to next question
   setTimeout(() => {
     currentQuestionIndex++;
 
-    // check if there are more questions or if the quiz is over
     if (currentQuestionIndex < quizQuestions.length) {
-      showQuestion();
+      showQuestion(); // Show next question
     } else {
-      showResults();
+      showResults(); // Quiz finished
     }
   }, 1000);
 }
+
+// ===============================
+// SHOW RESULTS SCREEN
+// ===============================
 
 function showResults() {
   quizScreen.classList.remove("active");
@@ -158,6 +212,7 @@ function showResults() {
 
   const percentage = (score / quizQuestions.length) * 100;
 
+  // Show result message based on score
   if (percentage === 100) {
     resultMessage.textContent = "Perfect! You're a genius!";
   } else if (percentage >= 80) {
@@ -171,8 +226,11 @@ function showResults() {
   }
 }
 
+// ===============================
+// RESTART QUIZ
+// ===============================
+
 function restartQuiz() {
   resultScreen.classList.remove("active");
-
-  startQuiz();
+  startQuiz(); // Reset everything
 }
