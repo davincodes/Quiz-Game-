@@ -1,49 +1,82 @@
+/* ==============================
+   GLOBAL FOUNDATION
+   ============================== */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* 
+Body becomes the layout controller.
+We use flexbox to center the entire app
+both vertically and horizontally.
+*/
+
 body {
-  background-color: #f5efe6;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  padding: 1rem;
-  font-family: "Arial", sans-serif;
+  background-color: #f5efe6; /* Soft background for contrast */
+  display: flex; /* Enables centering */
+  justify-content: center; /* Horizontal center */
+  align-items: center; /* Vertical center */
+  height: 100vh; /* Full viewport height */
+  padding: 1rem; /* Prevents edge touching on small screens */
+  font-family: "Arial", sans-serif; /* Global font */
 }
 
+/* ==============================
+   MAIN QUIZ CARD
+   ============================== */
+
 .container {
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  width: 100;
-  overflow: hidden;
-  max-width: 600px;
+  background-color: white; /* Card look */
+  border-radius: 1rem; /* Rounded corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft elevation */
+  width: 100; /* ⚠ likely typo, should be 100% */
+  max-width: 600px; /* Prevents stretching too wide */
+  overflow: hidden; /* Prevents content overflow */
   position: relative;
 }
-/* Screens */
+
+/* ==============================
+   SCREEN SYSTEM (SHOW/HIDE LOGIC)
+   ============================== */
+
+/* All screens are hidden by default */
 .screen {
   display: none;
   padding: 2rem;
   text-align: center;
 }
+
+/* Only the active screen is visible */
 .screen.active {
   display: block;
 }
 
-/* Start screen */
+/*
+This works with your JS:
+classList.add("active")
+classList.remove("active")
+*/
+
+/* ==============================
+   START SCREEN STYLING
+   ============================== */
 
 #start-screen h1 {
   margin-bottom: 20px;
-  color: #e86a33;
-  font-size: 2.5rem;
+  color: #e86a33; /* Brand accent color */
+  font-size: 2.5rem; /* Large welcoming heading */
 }
 
 #start-screen p {
   margin-bottom: 20px;
 }
+
+/* ==============================
+   QUIZ HEADER
+   ============================== */
 
 .quiz-header {
   margin-bottom: 20px;
@@ -53,63 +86,92 @@ body {
   font-size: 1.5rem;
   color: #333;
   margin-bottom: 1rem;
-  line-height: 1.4;
+  line-height: 1.4; /* Improves readability */
 }
 
+/* Displays question number & score side by side */
 .quiz-info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
+/* ==============================
+   ANSWER BUTTONS SYSTEM
+   ============================== */
+
 .answers-container {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: column; /* Stack vertically */
+  gap: 10px; /* Space between buttons */
   margin-bottom: 25px;
 }
 
+/* Base answer button style */
 .answer-btn {
   background-color: #f8f0e5;
   color: #333;
   border: 2px solid #e86a33;
   border-radius: 0.5rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; /* Smooth hover animation */
 }
+
+/* Hover effect */
 .answer-btn:hover {
   background-color: #eadbc8;
   color: white;
   cursor: pointer;
 }
 
+/* Correct answer state (added by JS) */
 .answer-btn.correct {
   background-color: #4caf50;
   color: white;
   border-color: #4caf50;
 }
 
+/* Incorrect answer state (added by JS) */
 .answer-btn.incorrect {
   background-color: #f44336;
   color: white;
   border-color: #f44336;
 }
 
+/*
+These classes are added dynamically:
+button.classList.add("correct")
+button.classList.add("incorrect")
+*/
+
+/* ==============================
+   PROGRESS BAR SYSTEM
+   ============================== */
+
+/* Background bar */
 .progress-bar {
   height: 10px;
   background-color: #f8f0e5;
   border-radius: 5px;
-  overflow: hidden;
+  overflow: hidden; /* Keeps progress inside */
   margin-top: 20px;
 }
 
+/* Fill element controlled by JS */
 .progress {
   height: 100%;
   background-color: #e86a33;
-  width: 0%;
-  transition: width 0.3s ease;
+  width: 0%; /* Starts empty */
+  transition: width 0.3s ease; /* Smooth growth animation */
 }
 
-/* result screen */
+/*
+JS updates:
+progressBar.style.width = "40%"
+*/
+
+/* ==============================
+   RESULT SCREEN
+   ============================== */
 
 #result-screen h1 {
   color: #e86a33;
@@ -129,6 +191,10 @@ body {
   color: #e86a33;
 }
 
+/* ==============================
+   GLOBAL BUTTON STYLE
+   ============================== */
+
 button {
   background-color: #e86a33;
   padding: 15px 30px;
@@ -144,7 +210,9 @@ button:hover {
   background-color: #d45c2a;
 }
 
-/* Responsive design */
+/* ==============================
+   RESPONSIVE DESIGN
+   ============================== */
 
 @media (max-width: 500px) {
   .screen {
@@ -157,3 +225,10 @@ button:hover {
     font-size: 1rem;
   }
 }
+
+/*
+When screen width is 500px or below:
+- Reduce padding
+- Make text and buttons smaller
+So the UI fits nicely on phones.
+*/

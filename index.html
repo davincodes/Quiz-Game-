@@ -1,55 +1,119 @@
 <!doctype html>
+<!-- Declares HTML5 document -->
+
 <html lang="en">
   <head>
+    <!-- Character encoding (supports special characters properly) -->
     <meta charset="UTF-8" />
+
+    <!-- Makes layout responsive on mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Browser tab title -->
     <title>Quiz Game</title>
+
+    <!-- External CSS file (all styling is handled there) -->
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
+    <!-- Main wrapper container for the entire quiz app -->
     <div class="container">
+      <!-- ===============================
+           START SCREEN
+           ===============================
+           This is the first screen the user sees.
+           It has class "active" so it's visible by default.
+           JS removes this class when quiz starts.
+      -->
       <div class="screen active" id="start-screen">
         <h1>Quiz Time!</h1>
         <p>Test your knowledge with these fun questions</p>
         <button id="start-btn">Start Quiz</button>
       </div>
 
+      <!-- ===============================
+           QUIZ SCREEN
+           ===============================
+           This screen shows:
+           - Question text
+           - Question number
+           - Score
+           - Answer buttons (inserted dynamically)
+           - Progress bar
+      -->
       <div class="screen" id="quiz-screen">
+        <!-- Header section for question and quiz info -->
         <div class="quiz-header">
+          <!-- JS dynamically changes this text -->
           <h2 id="question-text">Question goes here</h2>
+
+          <!-- Displays question count and score -->
           <div class="quiz-info">
             <p>
-              Question <span id="current-question">1</span> of
+              Question
+              <span id="current-question">1</span>
+              of
               <span id="total-questions">5</span>
             </p>
 
-            <p>Score: <span id="score">0</span></p>
+            <p>
+              Score:
+              <span id="score">0</span>
+            </p>
           </div>
         </div>
 
+        <!-- ===============================
+             ANSWERS CONTAINER
+             ===============================
+             Empty by default.
+             JS creates <button> elements and inserts them here
+             using document.createElement().
+        -->
         <div id="answers-container" class="answers-container">
-          <!-- Answer buttons will be insterted here from our js code later at some point -->
+          <!-- Answer buttons will be inserted here dynamically -->
         </div>
 
+        <!-- ===============================
+             PROGRESS BAR
+             ===============================
+             Outer div = bar background
+             Inner div (#progress) = growing fill
+             JS updates width using style.width
+        -->
         <div class="progress-bar">
           <div id="progress" class="progress"></div>
         </div>
       </div>
 
+      <!-- ===============================
+           RESULT SCREEN
+           ===============================
+           This screen appears after quiz is finished.
+           JS hides quiz screen and shows this one.
+      -->
       <div id="result-screen" class="screen">
         <h1>Quiz Results</h1>
+
         <div class="result-info">
           <p>
-            You scored <span id="final-score">0</span> out of
+            You scored
+            <span id="final-score">0</span>
+            out of
             <span id="max-score">5</span>
           </p>
 
+          <!-- JS changes this message depending on percentage -->
           <div id="result-message">Good job!</div>
         </div>
+
+        <!-- Button to restart the quiz -->
         <button id="restart-btn">Restart Quiz</button>
       </div>
     </div>
 
+    <!-- Connects JavaScript logic to this HTML structure -->
     <script src="script.js"></script>
   </body>
 </html>
